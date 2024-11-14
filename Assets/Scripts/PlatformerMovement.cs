@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
             /////////////// INFORMATION ///////////////
@@ -14,9 +16,9 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(CircleCollider2D))]
 public class PlatformerMovement : MonoBehaviour
 {
-    [SerializeField] private float maxSpeed = 10f;
+    [SerializeField] private float maxSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
-    // [SerializeField] private float gravityMultiplier = 1;    //unused
+    [SerializeField] private float gravityMultiplier = 1;
     [SerializeField] private SpriteRenderer spriteRenderer;
 
     public bool controlEnabled { get; set; } = true; // You can edit this variable from Unity Events
@@ -32,7 +34,9 @@ public class PlatformerMovement : MonoBehaviour
     private bool wasGrounded;
     private bool isGrounded;
 
-    [SerializeField] private Animator animator;
+    private Animator animator;
+
+    public event Action Interact;
     
     void Awake()
     {
@@ -41,12 +45,13 @@ public class PlatformerMovement : MonoBehaviour
         // Set gravity scale to 0 so player won't "fall" 
         rb.gravityScale = 0;
 
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
     
     void Update()
     {
         velocity = TranslateInputToVelocity(moveInput);
+        animator.SetFloat("SpeedX", MathF.Abs(velocity.x));
         
         // Apply jump-input:
         if (jumpInput && wasGrounded)
@@ -153,5 +158,10 @@ public class PlatformerMovement : MonoBehaviour
             jumpInput = false;
             jumpReleased = true;
         }
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        Interact?.Invoke();
     }
 }
