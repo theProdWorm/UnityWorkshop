@@ -14,7 +14,10 @@ public class MusicSphere : MonoBehaviour
         if(!other.CompareTag("Player"))
             return;
 
-        enabled = false;
         audioSource.clip = clip;
+        audioSource.Stop();
+        audioSource.Play();
+
+        Destroy(gameObject);
     }
 }

@@ -33,7 +33,7 @@ public class DialogueNPC : MonoBehaviour
         playerScript.Interact -= OnInteract;
     }
 
-    public void OnInteract()
+    public virtual void OnInteract()
     {
         dialogueManager.StartTalking(manuscript);
     }

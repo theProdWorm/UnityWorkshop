@@ -164,4 +164,9 @@ public class PlatformerMovement : MonoBehaviour
     {
         Interact?.Invoke();
     }
+
+    public void Teleport(Vector3 location)
+    {
+        transform.position = location;
+    }
 }
